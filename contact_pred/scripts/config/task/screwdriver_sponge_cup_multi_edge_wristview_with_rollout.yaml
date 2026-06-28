@@ -1,0 +1,51 @@
+# @package _global_
+defaults:
+  - /task/screwdriver_wristview
+  - _self_
+
+task:
+  name: screwdriver_sponge_cup_multi_edge_wristview_with_rollout
+  dataset:
+    sources:
+      - task_name: screwdriver
+        dataset_dir: data/training/screwdriver/contact
+        num_episodes: 10
+        camera_names: ["cam_left_wrist"]
+        contact_edges: [left_arm_screwdriver]
+        negative_edges: []
+        except_idx: []
+      - task_name: screwdriver_rollout
+        dataset_dir: data/training/screwdriver_rollout/contact
+        num_episodes: 5
+        camera_names: ["cam_left_wrist"]
+        contact_edges: [left_arm_screwdriver]
+        negative_edges: []
+        except_idx: []
+      - task_name: clean_cup
+        dataset_dir: data/training/clean_cup/contact
+        num_episodes: 16
+        camera_names: ["cam_right_wrist"]
+        contact_edges: [right_arm_sponge]
+        negative_edges: [right_arm_cup]
+        except_idx: []
+      - task_name: clean_cup_rollout
+        dataset_dir: data/training/clean_cup_rollout/contact
+        num_episodes: 6
+        camera_names: ["cam_right_wrist"]
+        contact_edges: [right_arm_sponge]
+        negative_edges: [right_arm_cup]
+        except_idx: []
+      - task_name: handoff_cup
+        dataset_dir: data/training/handoff_cup/contact
+        num_episodes: 30
+        camera_names: ["cam_right_wrist"]
+        contact_edges: [right_arm_cup]
+        negative_edges: [right_arm_sponge]
+        except_idx: []
+      - task_name: handoff_cup_rollout
+        dataset_dir: data/training/handoff_cup_rollout/contact
+        num_episodes: 10
+        camera_names: ["cam_right_wrist"]
+        contact_edges: [right_arm_cup]
+        negative_edges: [right_arm_sponge]
+        except_idx: []

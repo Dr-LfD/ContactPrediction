@@ -1,0 +1,13 @@
+defaults:
+  - train_contact_mlp_multi_edge_workspace
+  - _self_
+  - override task: clean_cup_right_arm_wristview_with_rollout
+
+name: train_clean_cup_with_rollout
+
+checkpoint:
+  topk:
+    monitor_key: val_accuracy_edge_right_arm_sponge
+    mode: max
+    k: 1
+    format_str: 'epoch={epoch:04d}-val_accuracy_edge_right_arm_sponge={val_accuracy_edge_right_arm_sponge:.4f}.ckpt'

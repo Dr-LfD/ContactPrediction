@@ -1,0 +1,13 @@
+defaults:
+  - train_contact_mlp_multi_edge_workspace
+  - _self_
+  - override task: screwdriver_sponge_cup_multi_edge_wristview_with_rollout
+
+name: train_screwdriver_sponge_cup_joint_with_rollout
+
+checkpoint:
+  topk:
+    monitor_key: val_accuracy_mean_per_edge
+    mode: max
+    k: 1
+    format_str: 'epoch={epoch:04d}-val_accuracy_mean_per_edge={val_accuracy_mean_per_edge:.4f}.ckpt'

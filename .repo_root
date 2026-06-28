@@ -1,0 +1,3 @@
+# Marker file: identifies the repository root for _get_project_root().
+# Do not remove. Its directory is the authoritative repo root regardless of the
+# directory's name, so the repo can be renamed/vendored freely.

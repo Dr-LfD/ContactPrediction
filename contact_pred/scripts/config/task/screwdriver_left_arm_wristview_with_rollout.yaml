@@ -1,0 +1,23 @@
+# @package _global_
+defaults:
+  - /task/screwdriver_wristview
+  - _self_
+
+task:
+  name: screwdriver_left_arm_wristview_with_rollout
+  dataset:
+    sources:
+      - task_name: screwdriver
+        dataset_dir: data/training/screwdriver/contact
+        num_episodes: 11
+        camera_names: ["cam_left_wrist"]
+        contact_edges:
+          - left_arm_screwdriver
+        except_idx: []
+      - task_name: screwdriver_rollout
+        dataset_dir: data/training/screwdriver_rollout/contact
+        num_episodes: 2
+        camera_names: ["cam_left_wrist"]
+        contact_edges:
+          - left_arm_screwdriver
+        except_idx: []

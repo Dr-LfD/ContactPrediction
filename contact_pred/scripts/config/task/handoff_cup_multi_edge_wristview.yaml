@@ -1,0 +1,37 @@
+name: &name handoff_cup_multi_edge_wristview
+
+image_shape: &image_shape [3, 128, 128]
+shape_meta: &shape_meta
+  obs:
+    cam_wrist:                       # served from /observations/wrist_masked/<edge>
+      shape: *image_shape
+      type: rgb
+    edge_text:
+      shape: [768]
+      type: low_dim
+  label:
+    shape: [1]
+    type: low_dim
+
+
+dataset:
+  _target_: contact_pred.scripts.dataset.contact_image_dataset.ContactImageDataset
+  shape_meta: *shape_meta
+  seed: 42
+  val_ratio: 0.1
+  text_encoder_model_name: bert-base-cased
+  text_encoder_max_length: 25
+  single_camera_per_edge: true
+  selected_camera_key: cam_wrist
+  robot_camera_map:
+    left_arm: cam_left_wrist
+    right_arm: cam_right_wrist
+  sources:
+    - task_name: handoff_cup
+      dataset_dir: data/training/handoff_cup/contact
+      num_episodes: 20
+      camera_names: ["cam_left_wrist", "cam_right_wrist"]
+      contact_edges:
+        - left_arm_cup
+        - right_arm_cup
+      except_idx: []

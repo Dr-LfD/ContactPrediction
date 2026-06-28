@@ -1,0 +1,112 @@
+defaults:
+  - _self_
+  - task: screwdriver_wristview
+
+name: train_keypose_transformer
+_target_: contact_pred.scripts.workspace.train_contact_mlp_workspace.TrainContactMlpWorkspace
+
+task_name: ${task.name}
+shape_meta: ${task.shape_meta}
+exp_name: "default"
+
+d_emb: 128
+
+predictor:
+  _target_: contact_pred.scripts.policy.contact_mlp_predictor.ContactMlpPredictor
+
+  shape_meta: ${shape_meta}
+
+  obs_encoder:
+    _target_: contact_pred.scripts.model.vision.dict_image_obs_encoder.DictImageObsEncoder
+    shape_meta: ${shape_meta}
+    rgb_model:
+      _target_: contact_pred.scripts.model.vision.model_getter.get_resnet
+      name: resnet18
+      weights: null
+    resize_shape: null
+    crop_shape: [120, 120]
+    # constant center crop
+    random_crop: True
+    use_group_norm: True
+    share_rgb_model: False
+    imagenet_norm: True
+    # cnn_out_layer: "layer4"
+    # embedding_dim: ${d_emb}
+
+  hidden_depth: 4
+  hidden_dim: 512
+  dropout: 0.2
+
+dataloader:
+  batch_size: 256
+  num_workers: 8
+  shuffle: True
+  pin_memory: True
+  persistent_workers: True
+  # drop_last: True
+
+val_dataloader:
+  batch_size: 256
+  num_workers: 4
+  shuffle: False
+  pin_memory: True
+  persistent_workers: False
+
+optimizer:
+  predictor_weight_decay: 1.0e-4
+  obs_encoder_weight_decay: 1.0e-6
+  learning_rate: 1.0e-5
+  betas: [0.9, 0.95]
+
+training:
+  device: "cuda:0"
+  seed: 42
+  debug: False
+  resume: True
+
+  # optimization
+  lr_scheduler: cosine
+  lr_warmup_steps: 1000
+  num_epochs: 400
+  gradient_accumulate_every: 1
+  freeze_encoder: False
+
+  sample_every: 50
+  checkpoint_every: 50
+  val_every: 50
+
+  max_train_steps: null
+  max_val_steps: null
+
+  tqdm_interval_sec: 1.0
+
+logging:
+  project: contact_prediction
+  resume: True
+  mode: online
+  name: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+  tags: ["${name}", "${task_name}", "${exp_name}"]
+  id: null
+  group: null
+
+checkpoint:
+  topk:
+    monitor_key: val_loss
+    mode: min
+    k: 1
+    format_str: 'epoch={epoch:04d}-val_loss={val_loss:.4f}.ckpt'
+  save_last_ckpt: True
+  save_last_snapshot: False
+
+multi_run:
+  run_dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  wandb_name_base: ${now:%Y.%m.%d-%H.%M.%S}_${name}_${task_name}
+
+hydra:
+  job:
+    override_dirname: ${name}
+  run:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+  sweep:
+    dir: data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}
+    subdir: ${hydra.job.num}

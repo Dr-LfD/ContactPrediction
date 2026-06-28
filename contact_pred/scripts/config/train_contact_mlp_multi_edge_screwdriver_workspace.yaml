@@ -1,0 +1,13 @@
+defaults:
+  - train_contact_mlp_multi_edge_workspace
+  - _self_
+  - override task: screwdriver_left_arm_wristview_with_rollout
+
+name: train_screwdriver_left_arm_selfplay
+
+checkpoint:
+  topk:
+    monitor_key: val_f1_edge_left_arm_screwdriver
+    mode: max
+    k: 1
+    format_str: 'epoch={epoch:04d}-val_f1_edge_left_arm_screwdriver={val_f1_edge_left_arm_screwdriver:.4f}.ckpt'

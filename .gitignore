@@ -1,0 +1,21 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+data/
+data/data_v1/
+data/data_v2/
+data/training/
+data/outputs/
+data/assembly
+data/bert/
+.omx/
+.codex
+.vscode
+.specstory
+# Runtime artifacts (not source)
+logs/
+*.log
+# Local env overrides (copy from .env.example)
+.env
+tests
+CHANGELOG.md

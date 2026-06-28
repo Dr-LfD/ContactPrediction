@@ -1,0 +1,24 @@
+# @package _global_
+defaults:
+  - /task/handoff_cup_multi_edge_wristview
+  - _self_
+
+task:
+  name: handoff_cup_multi_edge_wristview_with_rollout
+  dataset:
+    sources:
+      - task_name: handoff_cup
+        dataset_dir: data/training/handoff_cup/contact
+        num_episodes: 30
+        camera_names: ["cam_right_wrist"]
+        contact_edges:
+          - right_arm_cup
+        except_idx: []
+        label_extend: 80
+      - task_name: handoff_cup_rollout
+        dataset_dir: data/training/handoff_cup_rollout/contact
+        num_episodes: 10
+        camera_names: ["cam_right_wrist"]
+        contact_edges:
+          - right_arm_cup
+        except_idx: []
