@@ -18,4 +18,4 @@ logs/
 # Local env overrides (copy from .env.example)
 .env
 tests
-CHANGELOG.md
+CHANGELOG
